@@ -40,7 +40,6 @@ class MyUser {
     );
   }
 
-
   @override
   String toString() {
     // TODO: implement toString
