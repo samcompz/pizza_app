@@ -26,7 +26,7 @@ class MyAppView extends StatelessWidget {
             if(state.status == AuthenticationStatus.authenticated){
               return HomeScreen();
             }else{
-              return WelcomeScreen();
+              return HomeScreen();
             }
           }
       ),

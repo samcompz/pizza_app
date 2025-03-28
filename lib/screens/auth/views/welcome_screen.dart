@@ -67,6 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
+
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -108,6 +109,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                       ],
                     ),
                   ),
+
+
                 ],
               ),
             ),
