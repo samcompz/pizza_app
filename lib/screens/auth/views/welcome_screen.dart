@@ -13,133 +13,106 @@ class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-
-  @override
-  State<WelcomeScreen> createState() {
-    return _WelcomeScreenState();
-  }
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin{
+class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
   late TabController tabController;
 
   @override
   void initState() {
-    tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     super.initState();
+    tabController = TabController(initialIndex: 0, length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              Align(
-                alignment: AlignmentDirectional(20, -1.2),
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
+      body: Stack(
+        children: [
+          // Background Circles
+          Align(
+            alignment: const Alignment(0, -1.2),
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.tertiary,
               ),
+            ),
+          ),
 
-              Align(
-                alignment: AlignmentDirectional(2.7, -1.2),
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 1.3,
-                  width: MediaQuery.of(context).size.width / 1.3,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
+          Align(
+            alignment: const Alignment(2.7, -1.2),
+            child: Container(
+              height: MediaQuery.of(context).size.height / 1.3,
+              width: MediaQuery.of(context).size.width / 1.3,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.tertiary,
               ),
+            ),
+          ),
 
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
-                child: Container(),
-              ),
+          // Blur Effect
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+            child: Container(),
+          ),
 
-              Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.8,
-                  child: Column(
-                    children: [
+          // Main UI
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // TabBar
+                  TabBar(
+                    controller: tabController,
+                    unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
+                    labelColor: Theme.of(context).colorScheme.onBackground,
+                    tabs: const [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 50.0),
-                        child: TabBar(
-                          controller: tabController,
-                          unselectedLabelColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          labelColor:
-                              Theme.of(context).colorScheme.onBackground,
-                          tabs: [
-                            //sign in
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-
-                            //sign up
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-
-                            //Tabbar view
-                            Expanded(
-                              child: TabBarView(
-                                controller: tabController,
-                                children: [
-                                  BlocProvider<SignInBloc>(
-                                    create:
-                                        (context) => SignInBloc(
-                                          context
-                                              .read<AuthenticationBloc>()
-                                              .userRepository,
-                                        ),
-                                    child: SignInScreen(),
-                                  ),
-
-                                  BlocProvider<SignUpBloc>(
-                                    create:
-                                        (context) => SignUpBloc(
-                                          context
-                                              .read<AuthenticationBloc>()
-                                              .userRepository,
-                                        ),
-                                    child: SignUpScreen(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        padding: EdgeInsets.all(12.0),
+                        child: Text('Sign In', style: TextStyle(fontSize: 18)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Text('Sign Up', style: TextStyle(fontSize: 18)),
                       ),
                     ],
                   ),
-                ),
+
+                  // TabBarView (placed OUTSIDE the tabs)
+                  SizedBox(
+                    height: 300,
+                    child: TabBarView(
+                      controller: tabController,
+                      children: [
+                        BlocProvider(
+                          create: (context) => SignInBloc(
+                            context.read<AuthenticationBloc>().userRepository,
+                          ),
+                          child: const SignInScreen(),
+                        ),
+                        BlocProvider(
+                          create: (context) => SignUpBloc(
+                            context.read<AuthenticationBloc>().userRepository,
+                          ),
+                          child: const SignUpScreen(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
